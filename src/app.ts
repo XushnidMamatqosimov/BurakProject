@@ -2,6 +2,7 @@ import express, { urlencoded } from "express";
 import { url } from "inspector";
 import path from "path";
 import router from "./router";
+import routerAdmin from "./routerAdmin";
 
 
 //  1-Entrence
@@ -18,7 +19,8 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 //  4-Route
-app.use("/", router);    //Middileware design pattern
+app.use("/admin", routerAdmin);  // BSSR => EJS 
+app.use("/", router);   // SPA =>  React
 
 
 
