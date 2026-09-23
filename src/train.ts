@@ -1,8 +1,8 @@
 console.log("Hello world");
 
-// H - Task
+// M - Task
 const arr12 = [1,2,3,4];
-function getSquare(arr: number[]){
+function getSquare(arr: number[]): number[] {
     let a = 0;
     const squaredArr = []
 
@@ -14,8 +14,10 @@ function getSquare(arr: number[]){
         squaredArr.push(Math.pow(num,2));
     }
     for(let res of squaredArr){
-        console.log(res);
+        //console.log(res);
     }
+    return squaredArr;
 }
 
-getSquare(arr12);
+const newArr = getSquare(arr12);
+console.log(newArr);
