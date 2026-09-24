@@ -19,6 +19,14 @@ restaurantController.goLogin = (req: Request, res:Response) => {
     }
 };
 
+restaurantController.processLogin = (req: Request, res:Response) => {
+    try{
+        res.send("ProcessLogin");
+    }catch (err){
+        console.log("Error: ", err);
+    }
+};
+
 restaurantController.goSignUp = (req: Request, res:Response) => {
     try{
         res.send("SignUpPage");

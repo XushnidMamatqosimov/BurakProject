@@ -20,6 +20,15 @@ memberController.goLogin = (req: Request, res:Response) => {
     }
 };
 
+memberController.processLogin = (req: Request, res:Response) => {
+    try{
+        console.log("processLogin");
+        res.send("LoginPage");
+    }catch (err){
+        console.log("Error: ", err);
+    }
+};
+
 memberController.goSignUp = (req: Request, res:Response) => {
     try{
         console.log("goSignUp");

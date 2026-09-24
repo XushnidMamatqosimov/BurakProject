@@ -1,13 +1,14 @@
-import express, {Request, Response} from "express";
-const router = express.Router();
-import memberController  from "./controller/restaurant.controller";
+import express, { Request, Response } from "express";
+const routerAdmin = express.Router();
+import restaurantController from "./controller/restaurant.controller";
 
-router.get("/", memberController.goHome);
-
-router.get("/login", memberController.goLogin);
-
-router.get("/signup", memberController.goSignUp);
+// Restaurant
+routerAdmin.get("/", restaurantController.goHome);
+routerAdmin
+    .get("/login", restaurantController.goLogin)
+    .post("/login", restaurantController.processLogin);
+routerAdmin.get("/signup", restaurantController.goSignUp);
 
 
 // DI - dependency injection uchun Bean yasab Savatchaga joylash
-export default router;
+export default routerAdmin;
