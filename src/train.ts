@@ -1,7 +1,7 @@
 console.log("Hello world");
 
 // N - Task
-function getPalindronCheck(text: string): boolean{
+/* function getPalindronCheck(text: string): boolean{
     const reversedText = text.split('').reverse().join("");
 
     console.log(reversedText)
@@ -11,7 +11,7 @@ function getPalindronCheck(text: string): boolean{
     return false;
 }
  const a= getPalindronCheck("qovoq");
- console.log(a);
+ console.log(a); */
 
 
 
@@ -34,3 +34,19 @@ function getSquare(arr: number[]): number[] {
 
 const newArr = getSquare(arr12);
 console.log(newArr); */
+
+
+
+// O - Task
+function numberSum(arr: any[]){
+    let res = 0;
+    for(let num of arr){
+        if(typeof num === "number"){
+            res += num;
+        }
+    }
+    console.log(res);
+}
+
+const arrayBu = [1,"ali", "vali", 4,5, true, 9]
+numberSum(arrayBu);
