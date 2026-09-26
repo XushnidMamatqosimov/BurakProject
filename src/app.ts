@@ -24,7 +24,7 @@ app.set("view engine", "ejs");
 
 //  4-Route
 app.use("/admin", routerAdmin);  // BSSR => EJS 
-app.use("/", router);   // SPA =>  React
+app.use("/", router);            // SPA  => React
 
 
 
