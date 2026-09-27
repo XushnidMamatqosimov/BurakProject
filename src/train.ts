@@ -1,5 +1,19 @@
 console.log("Hello world");
 
+// O - Task
+function numberSum(arr: any[]){
+    let res = 0;
+    for(let num of arr){
+        if(typeof num === "number"){
+            res += num;
+        }
+    }
+    console.log(res);
+}
+
+const arrayBu = [1,"ali", "vali", 4,5, true, 9]
+numberSum(arrayBu);
+
 // N - Task
 /* function getPalindronCheck(text: string): boolean{
     const reversedText = text.split('').reverse().join("");
@@ -38,7 +52,7 @@ console.log(newArr); */
 
 
 // O - Task
-function numberSum(arr: any[]){
+/* function numberSum(arr: any[]){
     let res = 0;
     for(let num of arr){
         if(typeof num === "number"){
@@ -49,4 +63,4 @@ function numberSum(arr: any[]){
 }
 
 const arrayBu = [1,"ali", "vali", 4,5, true, 9]
-numberSum(arrayBu);
+numberSum(arrayBu); */
