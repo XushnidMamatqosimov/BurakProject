@@ -15,7 +15,7 @@ restaurantController.goHome = (req: Request, res:Response) => {
 
 restaurantController.goLogin = (req: Request, res:Response) => {
     try{
-        res.send("LoginPage");
+        res.send("LoginPage GoLign");
     }catch (err){
         console.log("Error: ", err);
     }
@@ -23,8 +23,9 @@ restaurantController.goLogin = (req: Request, res:Response) => {
 
 restaurantController.processLogin = async (req: Request, res:Response) => {
     try{
+        console.log("Process Login, processLogin")
         const input: LoginInput = req.body;
-        console.log("body: ", req.body );
+        console.log("body: ", req.body);
 
         const memberService = new MemberService();
         const result = await memberService.processLogin(input);
@@ -33,6 +34,7 @@ restaurantController.processLogin = async (req: Request, res:Response) => {
         res.send(result);
     }catch (err){
         console.log("Error: ", err);
+        res.status(500).send(err);
     }
 };
 

@@ -27,23 +27,26 @@ class MemberService {
 
     public async processLogin(input: LoginInput): Promise<Member> {
         const member = await this.memberModel
-            .findOne({ memberNick: input.memberNick}, 
-                {_id: 1,  memberNick: 1, memberPassword: 1}
-            )
+            .findOne({ memberNick: input.memberNick },
+                { _id: 1, memberNick: 1, memberPassword: 1 }
+            ).select("+memberPassword")
             .exec();
 
-        if (!member ){
-            throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK  );
+        if (!member) {
+            throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
         }
 
-        const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
+        console.log("MEMBER:", member);
+        console.log("INPUT PASSWORD:", input.memberPassword);
+        console.log("DB PASSWORD:", member.memberPassword);
 
-        const passwordIsMatch = input.memberPassword === member.memberPassword;
-        console.log(passwordIsMatch);
-        if(!passwordIsMatch){
+        const isMatch = await bcrypt.compare(
+            input.memberPassword,
+            member.memberPassword);
+
+        if (!isMatch) {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
         }
-
         return await this.memberModel.findById(member._id).exec();
     }
 }
