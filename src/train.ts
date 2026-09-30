@@ -1,6 +1,28 @@
+import { T } from "./libs/types/common";
+
 console.log("Hello world");
 
-// O - Task
+// P-Task
+const User = {
+    name: "Ali",
+    age: 24,
+    email: "ali@gmail.com"
+}
+function objectToArray (arr: Object): Array<T>{
+    const resArr = [];
+    const res = Object.entries(arr);
+    for(let loop of res){
+        resArr.push(loop);
+    }
+    return resArr;
+}
+
+const res = objectToArray(User)
+console.log(res);
+
+
+
+/* // O - Task
 function numberSum(arr: any[]){
     let res = 0;
     for(let num of arr){
@@ -13,7 +35,7 @@ function numberSum(arr: any[]){
 
 const arrayBu = [1,"ali", "vali", 4,5, true, 9]
 numberSum(arrayBu);
-
+ */
 // N - Task
 /* function getPalindronCheck(text: string): boolean{
     const reversedText = text.split('').reverse().join("");
