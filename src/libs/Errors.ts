@@ -18,6 +18,7 @@ export enum Message {
 
     NO_MEMBER_NICK = "No member find with this nickname",
     USED_MEMBER_NIKC ="Used NickName",
+    USED_NICK_PHONE = "Your are using already used phone or nickname",
     WRONG_PASSWORD = "Password is wrong",
 }
 
@@ -25,12 +26,16 @@ class Errors extends Error{
     public code: HttpCode;
     public message: Message;
 
+    static standard ={
+        code: HttpCode.INTERNAL_SERVER_ERROR,
+        message: Message.SOMETHING_WENT_WRONG
+    };
+
     constructor(statusCode: HttpCode, statusMessage: Message){
         super();
         this.code = statusCode, 
         this.message = statusMessage;
-
-    }
+    };
 }
 
 export default Errors;
