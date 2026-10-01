@@ -9,7 +9,8 @@ const memberService = new MemberService();
 const restaurantController: T = {};
 restaurantController.goHome = (req: Request, res:Response) => {
     try{
-        res.send("homePage");
+        console.log("goHome from restarantController");
+        res.render("home");
     }catch (err){
         console.log("Error: ", err);
     }
@@ -17,7 +18,7 @@ restaurantController.goHome = (req: Request, res:Response) => {
 
 restaurantController.goLogin = (req: Request, res:Response) => {
     try{
-        res.send("LoginPage GoLign");
+        res.render("login");
     }catch (err){
         console.log("Error: ", err);
     }
@@ -38,7 +39,7 @@ restaurantController.processLogin = async (req: Request, res:Response) => {
 
 restaurantController.goSignUp = (req: Request, res:Response) => {
     try{
-        res.send("SignUpPage");
+        res.render("signup");
     }catch (err){
         console.log("Error: ", err);
     }
