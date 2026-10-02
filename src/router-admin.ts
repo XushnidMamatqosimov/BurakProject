@@ -10,6 +10,7 @@ routerAdmin
 routerAdmin
     .get("/signup", restaurantController.goSignUp)
     .post("/signup", restaurantController.processSignup);
+routerAdmin.get("/check-me", restaurantController.checkAuthSession);    
 
 
 // DI - dependency injection uchun Bean yasab Savatchaga joylash
