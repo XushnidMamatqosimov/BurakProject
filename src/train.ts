@@ -2,8 +2,20 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+// R -Task
+function calculate(a: string, b: string): number{
+    let number;
+    number = parseInt(a)+parseInt(b);
+
+    return number;
+}
+const res = calculate("1", "2");
+console.log(res)
+
+
+
 // Q - Task
-function hasPropety(obj: object, isPropety: string) : boolean{
+/* function hasPropety(obj: object, isPropety: string) : boolean{
     let res =  Object.keys(obj);
     for(let key of res){
         if(key === isPropety){
@@ -18,7 +30,7 @@ const person = {
 }
 const isTrue = hasPropety(person, "name");
 console.log(isTrue);
-
+ */
 
 
 
