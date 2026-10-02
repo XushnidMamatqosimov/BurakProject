@@ -2,8 +2,28 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+// Q - Task
+function hasPropety(obj: object, isPropety: string) : boolean{
+    let res =  Object.keys(obj);
+    for(let key of res){
+        if(key === isPropety){
+            return true;
+        }
+    }
+    return false;
+}
+const person = {
+    name: "Declan",
+    age: 21
+}
+const isTrue = hasPropety(person, "name");
+console.log(isTrue);
+
+
+
+
 // P-Task
-const User = {
+/* const User = {
     name: "Ali",
     age: 24,
     email: "ali@gmail.com"
@@ -18,7 +38,7 @@ function objectToArray (arr: Object): Array<T>{
 }
 
 const res = objectToArray(User)
-console.log(res);
+console.log(res); */
 
 
 
