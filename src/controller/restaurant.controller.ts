@@ -40,6 +40,7 @@ restaurantController.processLogin = async (req: AdminRequest, res:Response) => {
 
     }catch (err){
         console.log("Error: ", err);
+        res.redirect("/admin/login")
         res.status(500).send(err);
     }
 };
@@ -67,8 +68,20 @@ restaurantController.processSignup = async (req: AdminRequest, res:Response) => 
 
     }catch (err){
         console.log("Error: ", err);
+        res.redirect("/admin/signup");
     }
 };
+
+restaurantController.goLogout = async (req: AdminRequest, res: Response)=> {
+    try{
+        console.log("Logout from restController");
+        req.session.destroy( function () {
+            res.redirect("/admin")
+        })
+    }catch(err){
+        console.log("Error: ", err);
+    }
+}
 
 restaurantController.checkAuthSession = async (req: AdminRequest, res:Response) => {  
     try{
