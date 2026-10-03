@@ -11,6 +11,7 @@ const memberController: T = {};
 memberController.signup = async (req: Request, res:Response) => {  
     try{
         console.log("signup by memberController");
+        
         const newMember: MemberInput = req.body;
         const result: Member = await memberService.signup(newMember);
         // Token 

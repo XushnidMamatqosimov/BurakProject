@@ -1,6 +1,6 @@
 import { T } from "../libs/types/common";
-import {Request, Response} from "express";
-import MemberService  from "../model/Member.service";
+import { NextFunction, Request, Response } from "express";
+import MemberService from "../model/Member.service";
 import MemberInput, { AdminRequest, LoginInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/memberTypeEnum";
 import session from "express-session";
@@ -9,52 +9,52 @@ import { Message } from "../libs/Errors";
 const memberService = new MemberService();
 
 const restaurantController: T = {};
-restaurantController.goHome = (req: Request, res:Response) => {
-    try{
+restaurantController.goHome = (req: Request, res: Response) => {
+    try {
         console.log("goHome from restarantController");
         res.render("home");
-    }catch (err){
+    } catch (err) {
         console.log("Error: ", err);
     }
 };
 
-restaurantController.goLogin = (req: Request, res:Response) => {
-    try{
+restaurantController.goLogin = (req: Request, res: Response) => {
+    try {
         res.render("login");
-    }catch (err){
+    } catch (err) {
         console.log("Error: ", err);
     }
 };
 
-restaurantController.processLogin = async (req: AdminRequest, res:Response) => {
-    try{
+restaurantController.processLogin = async (req: AdminRequest, res: Response) => {
+    try {
         console.log("Process Login, processLogin")
         const input: LoginInput = req.body;
         const login = await memberService.processLogin(input);
 
-       // sessions authentication
-       req.session.member = login;
-       req.session.save( function () {
+        // sessions authentication
+        req.session.member = login;
+        req.session.save(function () {
             res.send(login);
-       });
+        });
 
-    }catch (err){
+    } catch (err) {
         console.log("Error: ", err);
         res.redirect("/admin/login")
         res.status(500).send(err);
     }
 };
 
-restaurantController.goSignUp = (req: Request, res:Response) => {
-    try{
+restaurantController.goSignUp = (req: Request, res: Response) => {
+    try {
         res.render("signup");
-    }catch (err){
+    } catch (err) {
         console.log("Error: ", err);
     }
 };
 
-restaurantController.processSignup = async (req: AdminRequest, res:Response) => {  
-    try{
+restaurantController.processSignup = async (req: AdminRequest, res: Response) => {
+    try {
         console.log("processSignUp");
         const newMember: MemberInput = req.body;
         newMember.memberType = MemberType.RESTAURANT;
@@ -62,38 +62,49 @@ restaurantController.processSignup = async (req: AdminRequest, res:Response) => 
 
         // sessions authentication
         req.session.member = signUp;
-        req.session.save(function() {
+        req.session.save(function () {
             res.send(signUp);
         });
 
-    }catch (err){
+    } catch (err) {
         console.log("Error: ", err);
         res.redirect("/admin/signup");
     }
 };
 
-restaurantController.goLogout = async (req: AdminRequest, res: Response)=> {
-    try{
+restaurantController.goLogout = async (req: AdminRequest, res: Response) => {
+    try {
         console.log("Logout from restController");
-        req.session.destroy( function () {
+        req.session.destroy(function () {
             res.redirect("/admin")
         })
-    }catch(err){
+    } catch (err) {
         console.log("Error: ", err);
     }
 }
 
-restaurantController.checkAuthSession = async (req: AdminRequest, res:Response) => {  
-    try{
+restaurantController.checkAuthSession = async (req: AdminRequest, res: Response) => {
+    try {
         console.log("checkAuthSession method from restaurantController");
         if (req.session?.member) {
             res.send(`Hi, ${req.session.member.memberNick}`);
         } else {
             res.send(Message.NOT_AUTHENTICATED);
         }
-    }catch (err){
+    } catch (err) {
         console.log("Error, checkAuthentication", err);
     }
 };
+
+restaurantController.verifyRestaurant = async (req: AdminRequest, res: Response, next: NextFunction) => {
+
+   if (req.session?.member?.memberType === MemberType.RESTAURANT) {
+        req.member = req.session.member;
+        next();
+    } else {
+        const message = Message.NOT_AUTHENTICATED;
+        res.send(`<script> alert("${message}"); window.location.replace('/admin/login')</script>`);
+    }
+}
 
 export default restaurantController;
