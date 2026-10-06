@@ -1,3 +1,4 @@
+import { MemberType } from "../libs/enums/memberTypeEnum";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import MemberInput, { LoginInput, Member } from "../libs/types/member";
 import MemberModel from "../schema/Member.model";
@@ -52,6 +53,8 @@ class MemberService {
     /* SSR */
     public async processSignup(input: MemberInput): Promise<Member> {
         const exist = await this.memberModel.findOne(input);
+        if(exist.memberType = MemberType.RESTAURANT) 
+            throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
         if (exist !== null) {
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
         }
