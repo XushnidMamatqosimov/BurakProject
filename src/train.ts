@@ -2,15 +2,34 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+//S - TAsk
+function missingNumbers(arr: number[]): number[] {
+    let res = arr.sort((a,b)=>a-b);
+    let finalRes: number[] = [];
+    const maxNum = res[res.length-1];
+    const minNum = res[0];
+    for(let i = minNum; i<maxNum; i++){
+        if(!res.includes(i)){
+            finalRes.push(i);
+        }
+    }
+    return finalRes;
+}
+const iniatalArray = [1,4,5,8,12,];
+console.log(missingNumbers(iniatalArray));
+
+
+
+
 // R -Task
-function calculate(a: string, b: string): number{
+/* function calculate(a: string, b: string): number{
     let number;
     number = parseInt(a)+parseInt(b);
 
     return number;
 }
 const res = calculate("1", "2");
-console.log(res)
+console.log(res) */
 
 
 
