@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ProductCollection, ProductSize, ProductStatus, ProductValume } from "../libs/enums/productEnum";
+import { ProductCollection, ProductSize, ProductStatus, ProductVolume } from "../libs/enums/productEnum";
 
 const { Schema } = mongoose;
 
@@ -41,7 +41,7 @@ const productSchema = new Schema(
         productVolume: {
             type: Number,
             enum: ProductVolume,
-            default: ProductValume.ONE
+            default: ProductVolume.ONE
         },
 
         productDesc: {
