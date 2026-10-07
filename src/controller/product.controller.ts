@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
-import Errors from "../libs/Errors";
+import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import { AdminRequest } from "../libs/types/member";
+import { ProductInput } from "../libs/types/product";
 
 const productController: T = {};
 
 productController.getAllProducts = async (req: AdminRequest, res: Response) => {
     try {
         console.log("GetAllProduts method from productController");
-        console.log(req.member);
+        console.log("req.files: ", req.member);
         res.render("products");
     } catch (err) {
         console.log("Error: ", err);
@@ -17,9 +18,20 @@ productController.getAllProducts = async (req: AdminRequest, res: Response) => {
     }
 };
 
-productController.createNewProduct = async (req: Request, res: Response) => {
+productController.createNewProduct = async (req: AdminRequest, res: Response) => {
     try {
         console.log("create Prodoct method from productController");
+        console.log(req.files)
+        if(!req.files?.length){
+            throw new Errors(HttpCode.INTERNAL_SERVER_ERROR, Message.CREATE_FAILED);
+        }
+
+        const data: ProductInput = req.body;
+        data.productImages = req.files?.map((ele)=> {
+            return ele.path
+        })
+        console.log(data);
+
         res.send("done");
     } catch (err) {
         console.log("Error: ", err);
