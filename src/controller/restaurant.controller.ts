@@ -4,7 +4,7 @@ import MemberService from "../model/Member.service";
 import MemberInput, { AdminRequest, LoginInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/memberTypeEnum";
 import session from "express-session";
-import { Message } from "../libs/Errors";
+import Errors, { HttpCode, Message } from "../libs/Errors";
 
 const memberService = new MemberService();
 
@@ -35,7 +35,7 @@ restaurantController.processLogin = async (req: AdminRequest, res: Response) => 
         // sessions authentication
         req.session.member = login;
         req.session.save(function () {
-            res.send(login);
+            res.redirect("/admin/product/all");
         });
 
     } catch (err) {
@@ -56,14 +56,19 @@ restaurantController.goSignUp = (req: Request, res: Response) => {
 restaurantController.processSignup = async (req: AdminRequest, res: Response) => {
     try {
         console.log("processSignUp");
+        const file = req.file;
+        if(!file){
+            throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
+        }
         const newMember: MemberInput = req.body;
+        newMember.memberImage = file?.path;
         newMember.memberType = MemberType.RESTAURANT;
         const signUp = await memberService.processSignup(newMember);
 
         // sessions authentication
         req.session.member = signUp;
         req.session.save(function () {
-            res.send(signUp);
+            res.redirect("/admin/product/all");
         });
 
     } catch (err) {
