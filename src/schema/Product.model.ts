@@ -39,7 +39,7 @@ const productSchema = new Schema(
         },
 
         productVolume: {
-            type: String,
+            type: Number,
             enum: ProductValume,
             default: ProductValume.ONE
         },
@@ -63,6 +63,6 @@ const productSchema = new Schema(
 );
 
 productSchema.index(
-    {productName: 1, ProductSize: 1, ProductValume: 1}, 
+    {productName: 1, productSize: 1, productValume: 1}, 
     {unique: true});
 export default mongoose.model("Product", productSchema);
