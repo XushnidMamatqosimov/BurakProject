@@ -2,5 +2,8 @@
 
 <body>
     <h1>Products Ejs Page</h1>
+    <%data.map((value, key)=>{ %>
+        <p><%= value.productName %></p>
+    <% })%>
 </body>
 <%- include('./includes/footer') %>
