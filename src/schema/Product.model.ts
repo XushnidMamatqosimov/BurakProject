@@ -62,6 +62,6 @@ const productSchema = new Schema(
 );
 
 productSchema.index(
-    {productName: 1, productSize: 1, productValume: 1}, 
+    {productName: 1, productSize: 1, productVolume: 1}, 
     {unique: true});
 export default mongoose.model("Product", productSchema);
