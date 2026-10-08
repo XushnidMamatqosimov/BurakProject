@@ -55,6 +55,12 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
 productController.updateProduct = async (req: Request, res: Response) => {
     try {
         console.log("GetAllProduts method from productController");
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+
+        // servidedan kelayabdi;
+        const updatedProduct = await productService.updateProduct(id, req.body);
+
+        res.status(HttpCode.OK).json({ data: updatedProduct });
     } catch (err) {
         console.log("Error: ", err);
         if (err instanceof Errors) res.status(err.code).json(err);
