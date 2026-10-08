@@ -2,8 +2,17 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+// T - Task
+function sortedArrays(arr: number[], arr2: number[]): number[]{
+    const res = arr.concat(arr2).sort();
+    return res;
+}
+const array = [1,2,3];
+const array2 = [6,5,4];
+console.log(sortedArrays(array, array2));
+
 //S - TAsk
-function missingNumbers(arr: number[]): number[] {
+/* function missingNumbers(arr: number[]): number[] {
     let res = arr.sort((a,b)=>a-b);
     let finalRes: number[] = [];
     const maxNum = res[res.length-1];
@@ -17,7 +26,7 @@ function missingNumbers(arr: number[]): number[] {
 }
 const iniatalArray = [1,4,5,8,12,];
 console.log(missingNumbers(iniatalArray));
-
+ */
 
 
 
