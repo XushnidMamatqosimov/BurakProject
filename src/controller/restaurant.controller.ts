@@ -100,12 +100,15 @@ restaurantController.getUsers = async(req: Request, res: Response) => {
     }
 };
 
-restaurantController.updateUser = (req: Request, res: Response) => {
+restaurantController.updateUser = async (req: Request, res: Response) => {
     try {
        console.log("Get Users from restauranController[updateUser] method");
+       const user =  await memberService.updateUser(req.body);
+       res.status(HttpCode.OK).json({user: user});
     } catch (err) {
         console.log("Error updateUserMethod: ", err);
-        res.redirect("/admin/login");
+        if(err instanceof Errors) res.status(err.code).json(err);
+        else res.status(Errors.standard.code).json(Errors.standard);
     }
 };
 

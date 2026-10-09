@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { ObjectId} from "mongoose";
 import { Session, SessionData } from "express-session";
 import { MemberStatus, MemberType } from "../enums/memberTypeEnum";
 
@@ -20,7 +21,7 @@ export interface Member{
 }
 
 
-// Entity databasega malumotni tashib oborib beradi
+// DTO databasega malumotni tashib oborib beradi
 export interface MemberInput{
     memberNick: string;
     memberPhone: string;
@@ -32,6 +33,16 @@ export interface MemberInput{
     memberImage?: string;
     memberPoints?: number;
 
+}
+export interface MemberUpdateInput{
+    _id: ObjectId;
+    memberNick?: string;
+    memberPhone?: string;
+    memberPassword?: string;
+    memberStatus?: MemberStatus;
+    memberAddress?: string;
+    memberDesc?: string;
+    memberImage?: string;
 }
 
 export interface LoginInput{
