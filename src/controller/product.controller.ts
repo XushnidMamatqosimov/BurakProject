@@ -36,7 +36,7 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
         })
  
         // Schema chaqirilayabdi
-        await productService.createNewProduct(newProduct);
+        await productService.createNewProduct(newProduct); // argument
 
         // FrontEnd uchun send bolayabdi
         res.send(

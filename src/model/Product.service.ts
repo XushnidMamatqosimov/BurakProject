@@ -29,7 +29,7 @@ class ProductService {
     public async updateProduct(id: string, input: ProductUpdateInput): Promise<Product> {
         id = shapeIntMogooseObjectId(id);
         const res = await this.productModel.findOneAndUpdate({_id: id}, input, {new: true}).exec();
-        if(!res) throw new Errors(HttpCode.NOT_MODIFIED, Message.CREATE_FAILED);
+        if(!res) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
         console.log(res);
         return res;
     }
