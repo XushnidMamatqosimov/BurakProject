@@ -2,14 +2,29 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+// U - Task
+function getOddNumbers(number: number): number {
+    let son= 0;
+    const oddNumbers: number[] = [];
+    while (son < number) {
+        if (son % 2 === 1) {
+            oddNumbers.push(son);
+        }
+        son++;
+    }
+    return oddNumbers.length;
+}
+console.log(getOddNumbers(10));
+
+
 // T - Task
-function sortedArrays(arr: number[], arr2: number[]): number[]{
+/* function sortedArrays(arr: number[], arr2: number[]): number[]{
     const res = arr.concat(arr2).sort();
     return res;
 }
 const array = [1,2,3];
 const array2 = [6,5,4];
-console.log(sortedArrays(array, array2));
+console.log(sortedArrays(array, array2)); */
 
 //S - TAsk
 /* function missingNumbers(arr: number[]): number[] {
