@@ -1,1 +1,1 @@
-console.log("This message comes from Public/js/main.js, FrontEnd js ");
+console.log("Basic frontend javascript file");
