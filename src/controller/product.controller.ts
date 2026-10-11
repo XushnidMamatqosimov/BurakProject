@@ -23,6 +23,8 @@ productController.getAllProducts = async (req: AdminRequest, res: Response) => {
 
 productController.createNewProduct = async (req: AdminRequest, res: Response) => {
     try {
+        console.log("BODY:", req.body);
+        console.log("FILES:", req.files);
         console.log("create Prodoct method from productController");
         console.log(req.files)
         if(!req.files?.length){
@@ -30,8 +32,8 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
         }
 
         // reqning bodysida kelgan imglar arraydan bittalab ovolinayabdi
-        const newProduct: ProductInput = req.body;
-        newProduct.productImages = req.files?.map((ele)=> {
+        const newProduct: ProductInput = {...req.body,productCount: Number(req.body.productLeftCount)}; 
+             newProduct.productImages = req.files?.map((ele)=> {
             return ele.path
         })
  
