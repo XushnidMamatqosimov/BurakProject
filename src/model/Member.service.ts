@@ -53,8 +53,9 @@ class MemberService {
 
     /* SSR */
     public async processSignup(input: MemberInput): Promise<Member> {
-        const exist = await this.memberModel.findOne(input);
-        if(exist && exist.memberType === MemberType.RESTAURANT) 
+        const exist = await this.memberModel.findOne(
+            { memberType: MemberType.RESTAURANT });
+        if(input.memberType === MemberType.RESTAURANT && exist)
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
         try {
             const salt = await bcrypt.genSalt();
