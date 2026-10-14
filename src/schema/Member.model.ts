@@ -29,7 +29,7 @@ const memberSchema = new Schema({
     memberPassword: {
         type: String,
         select: false,
-        require: true
+        required: true
     },
 
     memberAddress: {

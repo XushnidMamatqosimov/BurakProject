@@ -1,12 +1,13 @@
 console.log("Signup frontend javascript file");
+
 $(function () {
-    const fileTarget = $(".file-box .upload-hiddin");
+    const fileTarget = $(".file-box .upload-hidden");
     let fileName; 
 
     fileTarget.on("change", function () {
         if(window.FileReader){
             const uploadFile = $(this)[0].files[0];
-            const fileType = uploadFile("type");
+            const fileType = uploadFile["type"]
             const validImageType = ["image/jpg","image/jpeg","image/png"];
             if(!validImageType.includes(fileType)){
                 alert("Please insert only JPEG, JPG, PNG");
