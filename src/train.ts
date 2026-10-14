@@ -2,8 +2,23 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+// V -Task
+function countChars(str: string): Record<string, number>{
+    const result: Record<string, number> = {};
+    for(const char of str){
+        if(result[char]){
+            result[char]++;
+        }else{
+            result[char] = 1;
+        }
+    }
+    return result;
+}
+console.log(countChars("Xushnid"));
+
+
 // U - Task
-function getOddNumbers(number: number): number {
+/* function getOddNumbers(number: number): number {
     let son= 0;
     const oddNumbers: number[] = [];
     while (son < number) {
@@ -14,7 +29,7 @@ function getOddNumbers(number: number): number {
     }
     return oddNumbers.length;
 }
-console.log(getOddNumbers(10));
+console.log(getOddNumbers(10)); */
 
 
 // T - Task
