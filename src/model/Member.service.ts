@@ -1,5 +1,5 @@
 import { shapeIntMogooseObjectId } from "../libs/config";
-import { MemberType } from "../libs/enums/memberTypeEnum";
+import { MemberStatus, MemberType } from "../libs/enums/memberTypeEnum";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import MemberInput, { LoginInput, Member, MemberUpdateInput } from "../libs/types/member";
 import MemberModel from "../schema/Member.model";
@@ -30,13 +30,24 @@ class MemberService {
 
     public async login(input: LoginInput): Promise<Member> {
         const member = await this.memberModel
-            .findOne({ memberNick: input.memberNick },
-                { _id: 1, memberNick: 1, memberPassword: 1 }
+            .findOne(
+                {
+                    memberNick: input.memberNick,
+                    memberStatus: { $ne: MemberStatus.DELETED }
+                },
+                {
+                    _id: 1, memberNick: 1,
+                    memberPassword: 1,
+                    memberStatus: 1,
+                }
             ).select("+memberPassword")
             .exec();
 
         if (!member) {
             throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+        }
+        else if(member.memberStatus === MemberStatus.BLOCK){
+            throw new Errors(HttpCode.FORBIDDIN, Message.BLOCKED_USER)
         }
 
         const isMatch = await bcrypt.compare(
@@ -50,12 +61,11 @@ class MemberService {
     }
 
 
-
     /* SSR */
     public async processSignup(input: MemberInput): Promise<Member> {
         const exist = await this.memberModel.findOne(
             { memberType: MemberType.RESTAURANT });
-        if(input.memberType === MemberType.RESTAURANT && exist)
+        if (input.memberType === MemberType.RESTAURANT && exist)
             throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
         try {
             const salt = await bcrypt.genSalt();
@@ -94,15 +104,15 @@ class MemberService {
     }
 
     public async getUsers(): Promise<Member[]> {
-        const result = await this.memberModel.find({memberType: MemberType.USER}).exec();
-        if(!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        const result = await this.memberModel.find({ memberType: MemberType.USER }).exec();
+        if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
         return result;
     }
 
     public async updateUser(input: MemberUpdateInput): Promise<Member> {
         input._id = shapeIntMogooseObjectId(input._id);
-        const result = await this.memberModel.findOneAndUpdate({_id: input._id}, input, {new: true}).exec();
-        if(!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+        const result = await this.memberModel.findOneAndUpdate({ _id: input._id }, input, { new: true }).exec();
+        if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
         return result;
     }
 }
