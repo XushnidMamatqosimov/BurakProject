@@ -61,10 +61,11 @@
               </tr>
             </thead>
             <!--  LOOP PRODUCTS: START  -->
+            <% users.map(function (value, key) { %>
             <tbody style="background: white">
-              <td>1</td>
-              <td>David</td>
-              <td>821024697878</td>
+              <td><%=key+1%></td>
+              <td><%=value.memberNick%></td>
+              <td><%=value.memberPhone%></td>
               <td style="width: 13%">
                 <select class="spec-select member-status">
                   <option value="ACTIVE" selected>ACTIVE</option>
@@ -74,6 +75,7 @@
               </td>
             </tbody>
             <!--  LOOP PRODUCTS: END  -->
+            <%})%>
           </table>
         </div>
       </div>

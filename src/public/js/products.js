@@ -1,5 +1,15 @@
 console.log("Products frontend javascript file");
 
+$("#process-btn").on("click", ()=> {
+    $(".dish-container").slideToggle(500);
+    $("#process-btn").css("display", "none");
+});
+$("#cancel-btn").on("click", ()=> {
+    $(".dish-container").slideToggle(100);
+    $("#process-btn").css("display", "flex");
+})
+
+
 $(function (){
     $(".product-collection").on("change", ()=>{
         const selectedValue = $(".product-collection").val();
