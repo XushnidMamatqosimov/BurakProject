@@ -2,8 +2,26 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+//W-TASK
+function chunkArray<T>(array: T[], length: number): T[][] {
+    if (length <= 0) {
+        throw new RangeError("length must be greater than 0");
+    }
+
+    const chunks: T[][] = [];
+    for (let i = 0; i < array.length; i += length) {
+        chunks.push(array.slice(i, i + length));
+    }
+    return chunks;
+}
+const arr = [1,2,3,4,5,6,7,8,9,11,12,13,14];
+console.log(chunkArray(arr, 5));
+
+
+
+
 // V -Task
-function countChars(str: string): Record<string, number>{
+/* function countChars(str: string): Record<string, number>{
     const result: Record<string, number> = {};
     for(const char of str){
         if(result[char]){
@@ -14,7 +32,7 @@ function countChars(str: string): Record<string, number>{
     }
     return result;
 }
-console.log(countChars("Xushnid"));
+console.log(countChars("Xushnid")); */
 
 
 // U - Task

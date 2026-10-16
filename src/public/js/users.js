@@ -13,17 +13,17 @@ $(function () {
         axios
             .post("/admin/user/edit", { _id: id, memberStatus: memberStatus })
             .then((response) => {
-                console.log("response: ", response);
                 const result = response.data;
                 console.log("result: ", result);
-                if(result.data){
-                    console.log("User updated successfully");
+                if (result.user) {
+                    console.log("User-status updated successfully");
                     $(".member-status").blur();
-                }else alert("User update failed");
+                    alert("User updated successfully");
+                } else alert("User update failed1");
             })
-            .catch((err)=>{
+            .catch((err) => {
                 console.log(err);
-                alert("User update failed")
+                alert("User update failed2")
             });
 
     });

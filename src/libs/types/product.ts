@@ -16,6 +16,7 @@ export interface ProductInput {
     
 }
 
+// entity Databasedan => Userga qaytish u-n
 export interface Product {
     _id: ObjectId;
     productStatus: ProductStatus;
