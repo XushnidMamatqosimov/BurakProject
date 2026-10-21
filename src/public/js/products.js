@@ -1,22 +1,22 @@
 console.log("Products frontend javascript file");
 
-$(function () {
+$(function () {     // document-ready
     $(".product-collection").on("change", () => {
         const selectedValue = $(".product-collection").val();
-        if (selectedValue === "DRINKS") {
+        if (selectedValue === "DRINKS") {    // DRINK bolganda
             $("#product-collection").hide();
             $("#product-volume").show();
-        } else {
+        } else {     // DISH bolganda
             $("#product-volume").hide()
             $("#product-collection").show();
         }
     });
 
-    $("#process-btn").on("click", () => {
+    $("#process-btn").on("click", () => {    // create button bosilsa ochil
         $(".dish-container").slideToggle(500);
         $("#process-btn").css("display", "none");
     });
-    $("#cancel-btn").on("click", () => {
+    $("#cancel-btn").on("click", () => {    // cancel button bosilsa yopil
         $(".dish-container").slideToggle(100);
         $("#process-btn").css("display", "flex");
     });

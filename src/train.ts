@@ -2,8 +2,38 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
-//W-TASK
-function chunkArray<T>(array: T[], length: number): T[][] {
+
+// X-Task
+function countOccurrences(obj: Record<string, any>, str: string): number {
+    let count = 0;
+    for (let key in obj) {
+        if (key === str) {
+            count++;
+        }
+        if (typeof obj[key] === "object" && obj[key] !== null) {
+            count += countOccurrences(obj[key], str);
+        }
+    }
+    return count;
+}
+console.log(
+    countOccurrences(
+        {
+            model: "Bugatti",
+            steer: {
+                model: "HANKOOK",
+                size: 30
+            }
+        },
+        "model"
+    )
+);
+
+
+
+
+// W-TASK
+/* function chunkArray<T>(array: T[], length: number): T[][] {
     if (length <= 0) {
         throw new RangeError("length must be greater than 0");
     }
@@ -15,7 +45,7 @@ function chunkArray<T>(array: T[], length: number): T[][] {
     return chunks;
 }
 const arr = [1,2,3,4,5,6,7,8,9,11,12,13,14];
-console.log(chunkArray(arr, 5));
+console.log(chunkArray(arr, 5)); */
 
 
 
