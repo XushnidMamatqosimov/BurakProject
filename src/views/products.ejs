@@ -56,8 +56,8 @@
                 <select class="spec-select new-product-status" 
                           id="<%=value._id%>">
                   <option value="PAUSE" <%= value.productStatus ==='PAUSE' ? 'selected': '' %>>PAUSE</option>
-                  <option value="PROCESS"  <%= value.productStatus ==='PROCESS' ? 'selected': '' %>>PROCESS</option>
-                  <option value="DELETE"  <%= value.productStatus ==='DELETE' ? 'selected': '' %>>DELETE</option>
+                  <option value="PROSSESS" <%= ['PROSSESS', 'PROCESS'].includes(value.productStatus) ? 'selected': '' %>>PROCESS</option>
+                  <option value="DELETED" <%= ['DELETED', 'DELETE'].includes(value.productStatus) ? 'selected': '' %>>DELETE</option>
                 </select>
               </td>
             </tbody>

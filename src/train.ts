@@ -2,9 +2,17 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
+// Y - Task
+function findIntersection(arr1: number[], arr2: number[]): number[]{
+    return arr1.filter((value) => arr2.includes(value));
+}
+const array: number[] = [1,2,3,4,5];
+const array2: number[] = [3,4,5,6,7,8];
+console.log(findIntersection(array, array2));
+
 
 // X-Task
-function countOccurrences(obj: Record<string, any>, str: string): number {
+/* function countOccurrences(obj: Record<string, any>, str: string): number {
     let count = 0;
     for (let key in obj) {
         if (key === str) {
@@ -28,7 +36,7 @@ console.log(
         "model"
     )
 );
-
+ */
 
 
 

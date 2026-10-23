@@ -15,7 +15,7 @@ $(function () { // ready - document
             .then((response) => {
                 const result = response.data;
                 console.log("result: ", result);
-                if (result.data) {
+                if (result.user) {
                     console.log("User-status updated successfully");
                     $(".member-status").blur();
                     alert("User updated successfully");

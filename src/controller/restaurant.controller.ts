@@ -1,144 +1,132 @@
 import { T } from "../libs/types/common";
 import { NextFunction, Request, Response } from "express";
 import MemberService from "../model/Member.service";
-import MemberInput, { AdminRequest, LoginInput } from "../libs/types/member";
-import { MemberType } from "../libs/enums/memberTypeEnum";
-import session from "express-session";
+import { AdminRequest, Member } from "../libs/types/member";
 import Errors, { HttpCode, Message } from "../libs/Errors";
+import { isRecord, logMemberError, sanitizeMember } from "../libs/utils/member";
 
 const memberService = new MemberService();
-
 const restaurantController: T = {};
-restaurantController.goHome = (req: Request, res: Response) => {
+
+async function establishSession(req: AdminRequest, member: Member): Promise<void> {
+    delete req.session.member;
+    await new Promise<void>((resolve, reject) => {
+        req.session.regenerate(error => error ? reject(error) : resolve());
+    });
+    req.session.member = sanitizeMember(member);
     try {
-        console.log("goHome from restarantController");
-        res.render("home");
-    } catch (err) {
-        console.log("Error: ", err);
+        await new Promise<void>((resolve, reject) => {
+            req.session.save(error => error ? reject(error) : resolve());
+        });
+    } catch (error) {
+        delete req.session.member;
+        throw error;
     }
+}
+
+function sendAuthError(res: Response, error: unknown, page: "login" | "signup"): void {
+    logMemberError(`admin-${page}`, error);
+    const message = error instanceof Errors ? error.message : Message.SOMETHING_WENT_WRONG;
+    res.send(`<script> alert("${message}"); window.location.replace('/admin/${page}')</script>`);
+}
+
+restaurantController.goHome = (req: Request, res: Response) => {
+    res.render("home");
 };
 
 restaurantController.goLogin = (req: Request, res: Response) => {
-    try {
-        res.render("login");
-    } catch (err) {
-        console.log("Error: ", err);
-    }
+    res.render("login");
 };
 
 restaurantController.processLogin = async (req: AdminRequest, res: Response) => {
     try {
-        console.log("Process Login, processLogin")
-        const input: LoginInput = req.body;
-        const login = await memberService.processLogin(input);
-
-        // sessions authentication
-        req.session.member = login;
-        req.session.save(function () {
-            res.redirect("/admin/product/all");
-        });
-
-    } catch (err) {
-        console.log("Error: ", err);
-        const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
-        res.send(
-            `<script> alert("${message}"); window.location.replace('/admin/login')</script>`
-        );
+        const member = await memberService.processLogin(req.body);
+        await establishSession(req, member);
+        res.redirect("/admin/product/all");
+    } catch (error) {
+        sendAuthError(res, error, "login");
     }
 };
 
 restaurantController.goSignUp = (req: Request, res: Response) => {
-    try {
-        res.render("signup");
-    } catch (err) {
-        console.log("Error: ", err);
-    }
+    res.render("signup");
 };
 
 restaurantController.processSignup = async (req: AdminRequest, res: Response) => {
     try {
-        console.log("processSignUp");
-        const file = req.file;
-        if(!file){
-            throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
+        if (!req.file || !isRecord(req.body)) {
+            throw new Errors(HttpCode.BAD_REQUEST, Message.INVALID_INPUT);
         }
-        const newMember: MemberInput = req.body;
-        newMember.memberImage = file?.path;
-        newMember.memberType = MemberType.RESTAURANT;
-        const signUp = await memberService.processSignup(newMember);
-
-        // sessions authentication
-        req.session.member = signUp;
-        req.session.save(function () {
-            res.redirect("/admin/product/all");
-        });
-
-    } catch (err) {
-        console.log("Error: ", err);
-       const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
-        res.send(
-            `<script> alert("${message}"); window.location.replace('/admin/signup')</script>`
-        );
+        const member = await memberService.processSignup({ ...req.body, memberImage: req.file.path });
+        await establishSession(req, member);
+        res.redirect("/admin/product/all");
+    } catch (error) {
+        sendAuthError(res, error, "signup");
     }
 };
 
 restaurantController.goLogout = async (req: AdminRequest, res: Response) => {
     try {
-        console.log("Logout from restController");
-        req.session.destroy(function () {
-            res.redirect("/admin")
-        })
-    } catch (err) {
-        console.log("Error: ", err);
+        delete req.session.member;
+        res.clearCookie("connect.sid");
+        await new Promise<void>((resolve, reject) => {
+            req.session.destroy(error => error ? reject(error) : resolve());
+        });
+        res.redirect("/admin");
+    } catch (error) {
+        logMemberError("admin-logout", error);
+        res.status(Errors.standard.code).json(Errors.standard);
     }
-}
+};
 
-restaurantController.getUsers = async(req: Request, res: Response) => {
+restaurantController.getUsers = async (req: Request, res: Response) => {
     try {
-       console.log("Get Users from restauranController[getUsers] method");
-      const users = await memberService.getUsers();
-      console.log("users: ", users)
-      res.render("users", {users: users});
-    } catch (err) {
-        console.log("Error: ", err);
+        const users = await memberService.getUsers();
+        res.render("users", { users });
+    } catch (error) {
+        logMemberError("admin-users", error);
         res.redirect("/admin/login");
     }
 };
 
 restaurantController.updateUser = async (req: Request, res: Response) => {
     try {
-       console.log("Get Users from restauranController[updateUser] method");
-       const user =  await memberService.updateUser(req.body);
-       res.status(HttpCode.OK).json({user: user});
-    } catch (err) {
-        console.log("Error updateUserMethod: ", err);
-        if(err instanceof Errors) res.status(err.code).json(err);
+        const user = await memberService.updateUser(req.body);
+        res.status(HttpCode.OK).json({ user });
+    } catch (error) {
+        logMemberError("admin-update-user", error);
+        if (error instanceof Errors) res.status(error.code).json(error);
         else res.status(Errors.standard.code).json(Errors.standard);
     }
 };
 
-restaurantController.checkAuthSession = async (req: AdminRequest, res: Response) => {
-    try {
-        console.log("checkAuthSession method from restaurantController");
-        if (req.session?.member) {
-            res.send(`Hi, ${req.session.member.memberNick}`);
-        } else {
-            res.send(Message.NOT_AUTHENTICATED);
-        }
-    } catch (err) {
-        console.log("Error, checkAuthentication", err);
-    }
+restaurantController.checkAuthSession = (req: AdminRequest, res: Response) => {
+    res.type("text/plain").send(req.session?.member
+        ? `Hi, ${req.session.member.memberNick}`
+        : Message.NOT_AUTHENTICATED);
 };
 
 restaurantController.verifyRestaurant = async (req: AdminRequest, res: Response, next: NextFunction) => {
-
-   if (req.session?.member?.memberType === MemberType.RESTAURANT) {
-        req.member = req.session.member;
-        next();
-    } else {
-        const message = Message.NOT_AUTHENTICATED;
-        res.send(`<script> alert("${message}"); window.location.replace('/admin/login')</script>`);
+    try {
+        const member = await memberService.getRestaurant(req.session?.member?._id);
+        if (member) {
+            req.member = member;
+            req.session.member = member;
+            res.locals.member = member;
+            next();
+            return;
+        }
+        delete req.member;
+        if (req.session) delete req.session.member;
+        res.locals.member = undefined;
+        res.send(`<script> alert("${Message.NOT_AUTHENTICATED}"); window.location.replace('/admin/login')</script>`);
+    } catch (error) {
+        delete req.member;
+        if (req.session) delete req.session.member;
+        res.locals.member = undefined;
+        logMemberError("admin-authorization", error);
+        res.status(Errors.standard.code).json(Errors.standard);
     }
-}
+};
 
 export default restaurantController;

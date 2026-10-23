@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import { AdminRequest } from "../libs/types/member";
-import { ProductInput } from "../libs/types/product";
 import ProductService from "../model/Product.service";
 
 const productService = new ProductService();
@@ -32,7 +31,7 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
         }
 
         // reqning bodysida kelgan imglar arraydan bittalab ovolinayabdi
-        const newProduct: ProductInput = {...req.body,productCount: Number(req.body.productLeftCount)}; 
+        const newProduct = {...req.body};
              newProduct.productImages = req.files?.map((ele)=> {
             return ele.path
         })
