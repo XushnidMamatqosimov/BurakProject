@@ -2,13 +2,28 @@ import { T } from "./libs/types/common";
 
 console.log("Hello world");
 
-// Y - Task
+// Z-Task
+function sumEvents(arr: number[]): number{
+    let newArray:number[] = [];
+    let result: number = 0;
+    for(let num of arr){
+        if(num%2==0){
+           result+=num;
+        }   
+    }
+    
+    return result;
+}
+const array: number[] = [1,2,3,4,5,6];
+console.log(sumEvents(array));
+
+/* // Y - Task
 function findIntersection(arr1: number[], arr2: number[]): number[]{
     return arr1.filter((value) => arr2.includes(value));
 }
 const array: number[] = [1,2,3,4,5];
 const array2: number[] = [3,4,5,6,7,8];
-console.log(findIntersection(array, array2));
+console.log(findIntersection(array, array2)); */
 
 
 // X-Task
