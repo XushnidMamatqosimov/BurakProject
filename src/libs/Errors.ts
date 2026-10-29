@@ -18,6 +18,7 @@ export enum Message {
     INVALID_INPUT = "Invalid request input",
 
     NO_MEMBER_NICK = "No member find with this nickname",
+    TOKEN_CREATION_FAILED = "Token creation failed",
     USED_MEMBER_NIKC ="Used NickName",
     BLOCKED_USER = "You have been blocked by Restaurant!!!",
     USED_NICK_PHONE = "Your are using already used phone or nickname",

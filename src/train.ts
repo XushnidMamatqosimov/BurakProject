@@ -11,7 +11,6 @@ function sumEvents(arr: number[]): number{
            result+=num;
         }   
     }
-    
     return result;
 }
 const array: number[] = [1,2,3,4,5,6];
