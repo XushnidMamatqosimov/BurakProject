@@ -45,6 +45,14 @@ export interface LoginInput{
     memberPassword: string; 
 }
 
+export interface UserRequest extends Request {
+    member?: Omit<Member, "memberPassword">;
+    file: Express.Multer.File;
+    files: Express.Multer.File[];
+
+}
+
+
 export interface AdminRequest extends Request {
     member?: Omit<Member, "memberPassword">;
     session: Session & {member?: Omit<Member, "memberPassword">};
