@@ -6,6 +6,7 @@ import { MemberStatus, MemberType } from "../enums/memberTypeEnum";
 
 // DTO malumotlarni tashib yuradi
 export interface Member{
+    status: any;
     _id: Types.ObjectId | string;
     memberNick: string;
     memberPhone: string;

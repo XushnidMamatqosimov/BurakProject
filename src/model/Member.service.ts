@@ -8,6 +8,7 @@ import {
 } from "../libs/utils/member";
 import MemberModel from "../schema/Member.model";
 import * as bcrypt from "bcryptjs";
+import { shapeIntMogooseObjectId } from "../libs/config";
 
 class MemberService {
     private readonly memberModel;
@@ -43,6 +44,13 @@ class MemberService {
             throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
         }
         return sanitizeMember(member.toObject());
+    }
+
+    public async getMemberDetails(member: Member): Promise<Member> {
+        const memberId = shapeIntMogooseObjectId(member._id);
+        const user = await this.memberModel.findOne({_id: memberId, memberStatus: MemberStatus.ACTIVE}).exec();
+        if(!user) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        return user;
     }
 
     /* SSR */

@@ -55,16 +55,33 @@ memberController.login = async (req: Request, res: Response) => {
 memberController.logout = (req: UserRequest, res: Response)=>{
   try{
     console.log("LogOut");
-    res.cookie("accessTooken", null, {maxAge: 0, httpOnly: true});
+    res.cookie("accessToken", null, {maxAge: 0, httpOnly: true});
     res.status(HttpCode.OK).json({ logout: true});
 
   }catch (error){
     logMemberError("Logout error: ", error);
     if (error instanceof Errors) res.status(error.code).json(error);
     else res.status(Errors.standard.code).json(Errors.standard);
+  }
+}
+
+memberController.getMemberDetails = async (req: UserRequest, res: Response) =>{
+  try{
+    console.log("getMemberDetails");
+    if (!req.member) {
+      throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
+    }
+    const result = await memberService.getMemberDetails(req.member);
+
+    res.status(HttpCode.OK).json(result);
+  }catch (error){
+    logMemberError("getMemberDetails1 error: ", error);
+    if (error instanceof Errors) res.status(error.code).json(error);
+    else res.status(Errors.standard.code).json(Errors.standard);
 
   }
 }
+
 
 memberController.verifyAuth = async (req: UserRequest, res: Response, next: NextFunction)=>{
   try{
