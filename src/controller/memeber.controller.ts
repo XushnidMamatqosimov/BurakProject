@@ -98,9 +98,20 @@ memberController.updateMember = async (req: UserRequest, res: Response) => {
     if (error instanceof Errors) res.status(error.code).json(error);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
-
 }
 
+memberController.getTopUsers = async (req: Request, res: Response) => {
+  try {
+    console.log("Get Top Users");
+    const topUsers = await memberService.GetTopUsers();
+
+    res.status(HttpCode.OK).json(topUsers);
+  } catch (error) {
+    logMemberError("GetTopUsers", error);
+    if (error instanceof Errors) res.status(error.code).json(error);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+}
 
 memberController.verifyAuth = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {

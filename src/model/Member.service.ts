@@ -60,8 +60,21 @@ class MemberService {
             input,
             { new: true })
             .exec();
-        if(!updated) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+        if (!updated) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
         return updated;
+    }
+
+    public async GetTopUsers(): Promise<Member[]> {
+        const topUsers = this.memberModel
+            .find({
+                memberStatus: MemberStatus.ACTIVE,
+                memberPoints: { $gte: 1 }
+            })
+            .sort({ memberPoints: 'desc' })
+            .limit(4)
+            .exec();
+        if(!topUsers) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        return topUsers;
     }
 
     /* SSR */
