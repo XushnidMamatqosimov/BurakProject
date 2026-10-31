@@ -17,6 +17,16 @@ class MemberService {
     }
 
     /* SPA */
+    public async getReataurant(): Promise<Member> {
+        const restaurant = await this.memberModel.findOne(
+            {
+                memberType: MemberType.RESTAURANT,
+            })
+            .exec();
+        if(!restaurant) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        return restaurant;
+    }
+
     public async signup(input: unknown): Promise<Member> {
         const newMember = buildMemberInput(input, MemberType.USER);
         const salt = await bcrypt.genSalt();
@@ -73,7 +83,7 @@ class MemberService {
             .sort({ memberPoints: 'desc' })
             .limit(4)
             .exec();
-        if(!topUsers) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        if (!topUsers) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
         return topUsers;
     }
 
