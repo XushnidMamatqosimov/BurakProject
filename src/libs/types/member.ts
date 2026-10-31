@@ -37,6 +37,7 @@ export interface MemberInput{
 
 }
 export interface MemberUpdateInput{
+    memberImage: string;
     _id: string;
     memberStatus: MemberStatus;
 }

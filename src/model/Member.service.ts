@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { MemberStatus, MemberType } from "../libs/enums/memberTypeEnum";
 import Errors, { HttpCode, Message } from "../libs/Errors";
-import { Member } from "../libs/types/member";
+import { Member, MemberUpdateInput } from "../libs/types/member";
 import {
     buildMemberInput, invalidInput, isMemberId, isRecord,
     sanitizeMember, validateLoginInput,
@@ -48,9 +48,20 @@ class MemberService {
 
     public async getMemberDetails(member: Member): Promise<Member> {
         const memberId = shapeIntMogooseObjectId(member._id);
-        const user = await this.memberModel.findOne({_id: memberId, memberStatus: MemberStatus.ACTIVE}).exec();
-        if(!user) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        const user = await this.memberModel.findOne({ _id: memberId, memberStatus: MemberStatus.ACTIVE }).exec();
+        if (!user) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
         return user;
+    }
+
+    public async updateMember(member: Member, input: MemberUpdateInput): Promise<Member> {
+        const memberId = shapeIntMogooseObjectId(member._id);
+        const updated = await this.memberModel.findByIdAndUpdate(
+            { _id: memberId },
+            input,
+            { new: true })
+            .exec();
+        if(!updated) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+        return updated;
     }
 
     /* SSR */
