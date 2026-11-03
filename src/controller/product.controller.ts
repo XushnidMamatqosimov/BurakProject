@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
-import { AdminRequest } from "../libs/types/member";
+import { AdminRequest, UserRequest } from "../libs/types/member";
 import ProductService from "../model/Product.service";
 import { ProductInput, ProductInquiry } from "../libs/types/product";
 import { ProductCollection } from "../libs/enums/productEnum";
+import { shapeIntMogooseObjectId } from "../libs/config";
 
 const productService = new ProductService();
 
@@ -23,14 +24,48 @@ productController.getProducts = async (req: Request, res: Response) => {
     if (productCollection) {
       inquiry.productCollection = productCollection as ProductCollection;
     }
-    if(search){
+    if (search) {
       inquiry.search = String(search);
     }
     console.log("serviga jonayabdi");
     const products = await productService.getProducts(inquiry);
     console.log("servicedan qaytdi");
 
-    res.status(HttpCode.OK).json({products});
+    res.status(HttpCode.OK).json({ products });
+  } catch (err) {
+    console.log("GetProducts: ", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+}
+
+productController.getProduct = async (req: UserRequest, res: Response) => {
+  try {
+    console.log("getProduct");
+    const { productId } = req.params;
+    if (typeof productId !== "string") {
+      res.status(400).json({
+        message: "productId bitta string bo‘lishi kerak",
+      });
+      return;
+    }
+
+    const rawMemberId = req.member?._id;
+    const memberId =
+      rawMemberId == null
+        ? null
+        : typeof rawMemberId === "string"
+          ? shapeIntMogooseObjectId(rawMemberId)
+          : rawMemberId;
+    const result = await productService.getProduct(memberId, productId);
+
+    if(req.member){
+      console.log("member info: ", req.member);
+    } else{
+      console.log("req ichida member yoq");
+    }
+
+    res.status(HttpCode.OK).json({ result });
   } catch (err) {
     console.log("GetProducts: ", err);
     if (err instanceof Errors) res.status(err.code).json(err);

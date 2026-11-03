@@ -5,6 +5,8 @@ import { Product, ProductInquiry } from "../libs/types/product";
 import { invalidInput, isRecord } from "../libs/utils/member";
 import ProductModel from "../schema/Product.model";
 import { T } from "../libs/types/common";
+import { Types } from "mongoose";
+import { shapeIntMogooseObjectId } from "../libs/config";
 
 const productFields = [
   "productStatus", "productCollection", "productName", "productPrice", "productCount",
@@ -80,6 +82,22 @@ class ProductService {
 
     if (result.length === 0) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
     console.log("serviceda validationlardan otdi");
+    return result;
+  }
+
+  public async getProduct(memberId: Types.ObjectId | null, id: string): Promise<Product> {
+    const productId = shapeIntMogooseObjectId(id);
+    let result = await this.productModel
+    .findOne({
+      _id: productId,
+      productStatus: ProductStatus.PROSSESS
+    }
+    ).exec();
+
+    // TODO: If authenticated user = > first => view log creation
+
+    if(! result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
     return result;
   }
 
