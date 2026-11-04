@@ -7,6 +7,10 @@ import ProductModel from "../schema/Product.model";
 import { T } from "../libs/types/common";
 import { Types } from "mongoose";
 import { shapeIntMogooseObjectId } from "../libs/config";
+import ViewService from "./View.service";
+import { ViewInput } from "../libs/types/view";
+import { ViewGroup } from "../libs/enums/viewEnum";
+import { ObjectId } from "mongoose";
 
 const productFields = [
   "productStatus", "productCollection", "productName", "productPrice", "productCount",
@@ -51,9 +55,11 @@ function normalizeProductInput(input: unknown, creating: boolean): Record<string
 
 class ProductService {
   private readonly productModel;
+  private viewService;
 
   constructor() {
     this.productModel = ProductModel;
+    this.viewService = new ViewService();
   }
 
   // SPA //
@@ -85,18 +91,37 @@ class ProductService {
     return result;
   }
 
-  public async getProduct(memberId: Types.ObjectId | null, id: string): Promise<Product> {
+  public async getProduct(memberId: ObjectId | null, id: string): Promise<Product> {
     const productId = shapeIntMogooseObjectId(id);
+    //user login bolmagan user bolsa
     let result = await this.productModel
-    .findOne({
-      _id: productId,
-      productStatus: ProductStatus.PROSSESS
+      .findOne({
+        _id: productId,
+        productStatus: ProductStatus.PROSSESS
+      }
+      ).exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    // user login bolgan user bolsa;
+    if (memberId) {
+      //checkExistence
+      const input: ViewInput = {
+        memberId: memberId, viewRefId: productId, viewGroup: ViewGroup.PRODUCT
+      }
+      const existView = await this.viewService.checkViewExistence(input);
+      
+      if (!existView) {
+        //insert view
+        console.log("Planning to insert new View");
+        await this.viewService.insertMemberView(input);
+      }
+
+      //increase viewCount
+      result = await this.productModel
+        .findByIdAndUpdate(
+          productId, { $inc: { productViews: +1 } }, { new: true }
+        ).exec();
     }
-    ).exec();
-
-    // TODO: If authenticated user = > first => view log creation
-
-    if(! result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
 
     return result;
   }
