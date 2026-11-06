@@ -62,7 +62,7 @@ productController.getProduct = async (req: UserRequest, res: Response) => {
     if(req.member){
       console.log("member info: ", req.member);
     } else{
-      console.log("req ichida member yoq");
+      console.log("req ichida member");
     }
 
     res.status(HttpCode.OK).json({ result });

@@ -109,18 +109,23 @@ class ProductService {
         memberId: memberId, viewRefId: productId, viewGroup: ViewGroup.PRODUCT
       }
       const existView = await this.viewService.checkViewExistence(input);
-      
+
       if (!existView) {
         //insert view
         console.log("Planning to insert new View");
         await this.viewService.insertMemberView(input);
-      }
 
-      //increase viewCount
-      result = await this.productModel
-        .findByIdAndUpdate(
-          productId, { $inc: { productViews: +1 } }, { new: true }
-        ).exec();
+        //increase viewCount
+        result = await this.productModel
+          .findByIdAndUpdate(
+            productId, { $inc: { productViews: +1 } }, { new: true }
+          ).exec();
+
+        // update natijasi null bo‘lishini tekshirish.
+        if (!result) {
+          throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        }
+      }
     }
 
     return result;

@@ -3,6 +3,7 @@ const router = express.Router();
 import memberController  from "./controller/memeber.controller";
 import uploader from "./libs/utils/uploader";
 import productController from "./controller/product.controller";
+import orderController from "./controller/order.controller";
 
 /** Member **/
 router.get("/member/restaurant", memberController.getReataurant);
@@ -25,6 +26,9 @@ router.get("/product/all", productController.getProducts);
 router.get("/product/:productId", memberController.retrieveAuth, productController.getProduct)
 
 /** Order **/
-
+/* router.post("/order/create", 
+    memberController.verifyAuth,   // Middleware/ authentication
+    orderController.createOrder);
+ */
 // DI - dependency injection uchun Bean yasab Savatchaga joylash
 export default router;
