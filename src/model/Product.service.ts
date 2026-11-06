@@ -98,8 +98,7 @@ class ProductService {
       .findOne({
         _id: productId,
         productStatus: ProductStatus.PROSSESS
-      }
-      ).exec();
+      }).exec();
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
 
     // user login bolgan user bolsa;

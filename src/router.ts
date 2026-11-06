@@ -26,9 +26,9 @@ router.get("/product/all", productController.getProducts);
 router.get("/product/:productId", memberController.retrieveAuth, productController.getProduct)
 
 /** Order **/
-/* router.post("/order/create", 
+router.post("/order/create", 
     memberController.verifyAuth,   // Middleware/ authentication
     orderController.createOrder);
- */
+
 // DI - dependency injection uchun Bean yasab Savatchaga joylash
 export default router;
