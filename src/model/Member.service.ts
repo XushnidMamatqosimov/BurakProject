@@ -88,6 +88,7 @@ class MemberService {
     }
 
     public async addUserPoint(member: Member, point: number): Promise<Member> {
+        
         const memberId = shapeIntMogooseObjectId(member._id);
 
         return await this.memberModel.findOneAndUpdate(

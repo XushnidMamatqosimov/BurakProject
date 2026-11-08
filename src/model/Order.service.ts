@@ -88,11 +88,12 @@ class OrderService {
     ).exec();
     if(!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
-    if(result.orderStatus = OrderStatus.PROCESS){
+    if(result.orderStatus === OrderStatus.PROCESS){
       await this.memberService.addUserPoint(member, 1);
 
     }
     return result; 
+   
   }
 
   private async recordOrderItem(orderId: ObjectId, input: OrderItemInput[]): Promise<void> {
