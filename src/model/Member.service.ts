@@ -23,7 +23,7 @@ class MemberService {
                 memberType: MemberType.RESTAURANT,
             })
             .exec();
-        if(!restaurant) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+        if (!restaurant) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
         return restaurant;
     }
 
@@ -85,6 +85,16 @@ class MemberService {
             .exec();
         if (!topUsers) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
         return topUsers;
+    }
+
+    public async addUserPoint(member: Member, point: number): Promise<Member> {
+        const memberId = shapeIntMogooseObjectId(member._id);
+
+        return await this.memberModel.findOneAndUpdate(
+            { _id: memberId, memberType: MemberType.USER, memberStatus: MemberStatus.ACTIVE },
+            { $inc: { memberPoints: point } },
+            { new: true }).exec();
+
     }
 
     /* SSR */
