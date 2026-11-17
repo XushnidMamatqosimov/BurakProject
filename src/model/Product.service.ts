@@ -12,6 +12,7 @@ import { ViewInput } from "../libs/types/view";
 import { ViewGroup } from "../libs/enums/viewEnum";
 import { ObjectId } from "mongoose";
 
+
 const productFields = [
   "productStatus", "productCollection", "productName", "productPrice", "productCount",
   "productSize", "productVolume", "productDesc", "productImages", "productViews",
